@@ -1,0 +1,63 @@
+% Copyright: FAU https://www.youtube.com/channel/UCJbnVTvSB6gEt4kgOLOMQMA
+% By: Dr Robert B Cooper
+% Subject: MAP 6264 - Queueing Theory
+% Homework 1 BASIC Programming Language
+% Recoded BASIC to Octave (MATLAB): Alexander S Pondok
+
+
+
+
+C=zeros(1,50);                                % 100 C(50) (50 is max number of servers)
+S = input("Input number of Servers:");        % 110 INPUT S (S = number of servers)
+NSTOP = input("Input number of Customers:");  %      NSTOP (NSTOP = customers to be simulated)
+lambda=4;
+
+A=0;
+J=0;                                          % 150 J=0
+K=0;
+M=0;
+X=0;
+AB=0;
+A_array=zeros(1,S);
+X_array=zeros(1,S);
+
+  IA=-(1/lambda)*log(1-rand());               % 130 IA= (IA = interarrival time)
+  IX=-(2.4)*log(1-rand());                    %     X= (X = service time)
+  A=A+IA;                                     % 140 A=A+IA (A = arrival time)
+  X=X+IX;                                     %     X= (X = service time)
+  C(1,1)=A+X;                                 % 210 C(J)=A+X
+  A_array(1,1)=A;
+  X_array(1,1)=X;
+  M=C(1,1);                                   % 220 M=C(1) (M = shortest server-completion time)
+for I=2:S                                     % 230 FOR I=2 TO S
+  IA=-(1/lambda)*log(1-rand());               % 200 X= (X = service time)
+  IX=-(2.4)*log(1-rand());
+  A=A+IA;
+  X=X+IX;
+  C(1,I)=A+X;
+  A_array(1,I)=A;
+  X_array(1,I)=X;
+  X=0;
+  
+  if (C(1,I)<M)                               % 240 IF C(I)<M THEN M=C(I)
+    M=C(1,I);                                 %     THEN M=C(I)        
+    continue;                                 % 250 NEXT I
+  endif
+endfor
+for I=1:S
+  if (M>A_array(1,I))                         % 260 IF M>A
+      AB=AB+M-A_array(1,I);                   %     THEN AB=AB+M-A (AB = cumulative time during which all serversbusy)
+      continue;
+  endif
+endfor
+for D=1:NSTOP                                 % 120 FOR D=1 TO NSTOP
+    J=J+1;
+    if (J == S+1)                             % 170 IF J=S+1 
+      K=K+1;                                  %     THEN K=K+1 (K = number of customers that are blocked)
+      J=0;                                    % 150 J=0
+      continue;
+    endif
+endfor
+
+FCB=K/NSTOP                                   % PRINT K/NSTOP (fraction of customers blocked, fraction of time all servers are simultaneously busy)
+FSB=AB/A                                      % Print AB/A (fraction of customers blocked, fraction of time all servers are simultaneously busy)
