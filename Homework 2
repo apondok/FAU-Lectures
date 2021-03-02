@@ -1,0 +1,41 @@
+clear all;
+
+% Copyright: FAU https://www.youtube.com/channel/UCJbnVTvSB6gEt4kgOLOMQMA
+% By: Dr Robert B Cooper
+% Subject: MAP 6264 - Queueing Theory
+% Homework 2 BASIC Programming Language
+% Recoded BASIC to Octave (MATLAB): Alexander S Pondok
+
+c=0;
+T=0;
+X=0;
+SX=0;
+R=0;
+S=0;
+I=0;
+SR=0;
+SI=0;
+
+for j=1:100000                      % j (j = taxis to be simulated)
+  T=(100-500)*log(rand(1));         % T (T = last arrival time of taxi)
+                                    %    (100 or more units away from origin)
+  X=(1-2)*log(rand(1));             % X (X = Poisson Process of Arrival Times)        
+  c=c+1;                            % c (c = counting arrivals)
+  SX=SX+X;                          % SX (SX = Sum of arrivals)
+  S=S+X;                            % S (S = Sum of X for the individual experiment)
+  if S<T                            % IF S<T THEN 130
+    X=-log(rand(1));                % X (X = Poisson Process of Arrival Times)
+    c=c+1;                          % c (c = counting arrivals)
+    SX=SX+X;                        % SX (SX = Sum of arrivals)
+    S=S+X;                          % S (S = Sum of X for the individual experiment)
+  else;
+    R=S-T;                          % R (Remainder of wait time)
+    SR=SR+R;
+    S=0;                            % S (S = Sum of my inter-arrival times)
+  endif
+    I=(1-3)*log(rand(1));           % I (I = Poisson Process of 2 Arrival Times interval)
+    SI=SI+I;                        % SI (SI = Sum of Intervals)
+endfor
+E_SX=SX/c                                   % E(X): Theory = 1
+E_SI=SI/j                                   % E(I): Theory = 2
+E_SR=SR/j                                   % E(R): Theory = 1
