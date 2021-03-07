@@ -10,11 +10,12 @@ clear all;
 
 
 C=zeros(1,50);                                % 100 C(50) (50 is max number of servers)
-S = input("Input number of Servers:");        % 110 INPUT S (S = number of servers)
-NSTOP = input("Input number of Customers:");  %      NSTOP (NSTOP = customers to be simulated)
+S = 5; %input("Input number of Servers:");        % 110 INPUT S (S = number of servers)
+NSTOP = 10000; %input("Input number of Customers:");  %      NSTOP (NSTOP = customers to be simulated)
 lambda=4;
 
 A=0;
+B=0;
 F=0;
 J=0;                                          % 150 J=0
 K=0;
@@ -29,12 +30,10 @@ for D=1:NSTOP
   if J==S+1
     K=K+1;
     J=0;
-    continue
+    continue;
   endif
   if A<C(1,J)
     J=J+1;
-    
-    F=F+1;
   else
     X=-(2.4)*log(1-rand(1));
     C(1,J)=A+X;
@@ -43,16 +42,18 @@ for D=1:NSTOP
   if J==S+1
     K=K+1;
     J=0;
-    continue
+    continue;
   endif
   for I=2:S
     if C(1,I)<M
       M=C(1,I);
-    endif
-    if M>A
-        AB=AB+M-A;
+      continue;
     endif
   endfor
+  if M>A
+    AB=AB+M-A;
+    continue;
+  endif
 endfor
 FCB=K/NSTOP                        % PRINT K/NSTOP (PI - fraction of customers blocked, fraction of time all servers are simultaneously busy)
 FSB=(AB/A)                           % PRINT AB/A (fraction of busy time, fraction of time all servers are simultaneously busy)
