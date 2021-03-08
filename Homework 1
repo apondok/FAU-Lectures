@@ -10,7 +10,7 @@ clear all;
 
 
 C=zeros(1,50);                                % 100 C(50) (50 is max number of servers)
-S = 5; %input("Input number of Servers:");        % 110 INPUT S (S = number of servers)
+S = 10; %input("Input number of Servers:");        % 110 INPUT S (S = number of servers)
 NSTOP = 10000; %input("Input number of Customers:");  %      NSTOP (NSTOP = customers to be simulated)
 lambda=4;
 
@@ -27,15 +27,14 @@ for D=1:NSTOP
   J=J+1;
   if J==S+1
     K=K+1;
-    IA=-(1/lambda)*log(1-rand(1));    % 130 IA= (IA = interarrival time) % -(1/lambda)*log(1-rand()); or 0.25;
-    A=A+IA;
     J=0;
     J=J+1;
     if A<C(1,J)
       J=J+1;
+      continue;
     endif
   endif
-  X=-(2.4)*log(1-rand(1));
+  X=-2.4*log(1-rand(1));
   C(1,J)=A+X;
   M=C(1,1);
   for I=1:S
@@ -46,7 +45,6 @@ for D=1:NSTOP
   endfor
   if M>A
     AB=AB+M-A;
-    K=K+1;
     continue;
   endif
 endfor
