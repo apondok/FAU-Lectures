@@ -15,8 +15,6 @@ NSTOP = 10000; %input("Input number of Customers:");  %      NSTOP (NSTOP = cust
 lambda=4;
 
 A=0;
-B=0;
-F=0;
 J=0;                                          % 150 J=0
 K=0;
 M=0;
@@ -24,27 +22,23 @@ X=0;
 AB=0;
 
 for D=1:NSTOP
-  IA=-(1/4)*log(1-rand(1));    % 130 IA= (IA = interarrival time) % -(1/lambda)*log(1-rand()); or 0.25;
+  IA=-(1/lambda)*log(1-rand(1));    % 130 IA= (IA = interarrival time) % -(1/lambda)*log(1-rand()); or 0.25;
   A=A+IA;
   J=J+1;
   if J==S+1
     K=K+1;
+    IA=-(1/lambda)*log(1-rand(1));    % 130 IA= (IA = interarrival time) % -(1/lambda)*log(1-rand()); or 0.25;
+    A=A+IA;
     J=0;
-    continue;
-  endif
-  if A<C(1,J)
     J=J+1;
-  else
-    X=-(2.4)*log(1-rand(1));
-    C(1,J)=A+X;
-    M=C(1,1);
+    if A<C(1,J)
+      J=J+1;
+    endif
   endif
-  if J==S+1
-    K=K+1;
-    J=0;
-    continue;
-  endif
-  for I=2:S
+  X=-(2.4)*log(1-rand(1));
+  C(1,J)=A+X;
+  M=C(1,1);
+  for I=1:S
     if C(1,I)<M
       M=C(1,I);
       continue;
@@ -52,6 +46,7 @@ for D=1:NSTOP
   endfor
   if M>A
     AB=AB+M-A;
+    K=K+1;
     continue;
   endif
 endfor
