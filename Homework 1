@@ -5,9 +5,10 @@ clear all;
 % Subject: MAP 6264 - Queueing Theory
 % Homework 1 BASIC Programming Language
 % Recoded BASIC to Octave (MATLAB): Alexander S Pondok
+% Thank you to: dallison on homework_1 url - https://github.com/dalisson/map6264_queueing_theory
 
 C=zeros(1,50);                                        % 100 C(50) (50 is max number of servers)
-S = 2; %input("Input number of Servers:");            % 110 INPUT S (S = number of servers)
+S = 10; %input("Input number of Servers:");            % 110 INPUT S (S = number of servers)
 NSTOP = 10000; %input("Input number of Customers:");  %      NSTOP (NSTOP = customers to be simulated)
 lambda=4;
 
@@ -20,30 +21,24 @@ AB=0;
 SX=0;
 
 for D=1:NSTOP
-  IA=-(0.25)*log(1-rand(1));        %  130 IA= (IA = interarrival time) % -(1/lambda)*log(1-rand()); or 0.25;
-  A=A+IA;                           %  140 A=A+IA (A = arrival time)
-  J=J+1;                            %  160 J=J+1 (J = index of server being probed)
-  if J==S+1                         %  170 IF J=S+1 THEN K=K+1 (K = number of customers that are blocked)
-    K=K+1;
-    J=0;
-    J=J+1;
-    if A<C(1,J)                     %  190 IF A<C(J) THEN 160 (C(J) = completion time for server J) 
-      J=J+1;
-    endif
-  endif
-  X=-2.4*log(1-rand(1));            %  200 X= (X = service time)
-  C(1,J)=A+X;                       %  210 C(J)=A+X
-  M=C(1,1);                         %  220 M=C(1) (M = shortest server-completion time)
-  for I=2:S                         %  230 FOR I=2 TO S
-    if C(1,I)<M                     %  240 IF C(I)<M THEN M=C(I)
-      M=C(1,I);
+  IA=-(1/lambda)*log(1-rand(1));
+  A=A+IA;
+  X=-2.4*log(1-rand(1));
+  SX=SX+X;
+  J=1;
+  for I=1:S
+    if C(1,I)<C(1,J)
+      J=I;
       continue;
     endif
   endfor
-  if M>A                            %  260 IF M>A THEN AB=AB+M-A (AB = cumulative time during which all servers busy) 
-    AB=AB+M-A;
-    continue;
+  if C(1,J)>A
+    K=K+1;
+    AB=AB+C(1,J)-A;
+  else
+    C(1,J)=A+X;
   endif
 endfor
 FCB=K/NSTOP                         % PRINT K/NSTOP (PI - fraction of customers blocked, fraction of time all servers are simultaneously busy)
 FSB=(AB/A)                          % PRINT AB/A (fraction of busy time, fraction of time all servers are simultaneously busy)
+FSX=(SX/A)                          % PRINT SX/A (Total service time divided by total arrival time: Erlang unit)
