@@ -19,8 +19,7 @@ SI=0;
 for j=1:10000                             % j (j = taxis to be simulated)
   T=(100-500)*log(rand(1));               % T (T = last arrival time of taxi)
                                           %    (100 or more units away from origin)
-  X=-log(rand(1));                        % X (X = Poisson Process of Arrival Times)        
-    SX=SX+X;                              % SX (SX = Sum of arrivals)
+  X=-log(rand(1));                        % X (X = Poisson Process of Arrival Times)
     S=S+X;                                % S (S = Sum of X for the individual experiment)
   if S<T                                  % IF S<T THEN 130
     X=-log(rand(1));                      % X (X = Poisson Process of Arrival Times)
@@ -35,6 +34,6 @@ for j=1:10000                             % j (j = taxis to be simulated)
     I=(1-3)*log(rand(1));                 % I (I = Poisson Process of 2 Arrival Times interval)
     SI=SI+I;                              % SI (SI = Sum of Intervals)
 endfor
-E_SX=SX/c                                 % E(X): Theory = 2
+E_SX=SX/c                                 % E(X): Theory = 1
 E_SI=SI/j                                 % E(I): Theory = 2
 E_SR=SR/j                                 % E(R): Theory = 1
