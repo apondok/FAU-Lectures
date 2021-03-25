@@ -16,6 +16,8 @@ I=0;
 SR=0;
 SI=0;
 
+% PART A
+
 for j=1:10000                             % j (j = taxis to be simulated)
   T=(100-500)*log(rand(1));               % T (T = last arrival time of taxi)
                                           %    (100 or more units away from origin)
@@ -37,3 +39,33 @@ endfor
 E_SX=SX/c                                 % E(X): Theory = 1
 E_SI=SI/j                                 % E(I): Theory = 2
 E_SR=SR/j                                 % E(R): Theory = 1
+
+% PART B
+
+u=0;
+V=0;
+V_X=0;
+
+for j=1:10000                             % j (j = taxis to be simulated)
+  T=(100-500)*log(rand(1));               % T (T = last arrival time of taxi)
+                                          %    (100 or more units away from origin)
+  Y=11*0.1+1*0.9;                         % Y (Y = calculating expected value of distribution probability Y)
+  X=(Y+u);                                  % X (X = Y (distribution probability) + u (constants) )
+    S=S+X;                                % S (S = Sum of X for the individual experiment)
+  if S<T                                  % IF S<T THEN 130
+    Y=11*0.1+1*0.9;
+    V=11^2*0.1+1^2*0.9;                   % V (V = squared deviation of a distribution probability)
+    X=(Y+u);                                % X (X = Poisson Process of Arrival Times)
+    c=c+1;                                % c (c = counting arrivals)
+      SX=SX+X;                            % SX (SX = Sum of arrivals)
+      V_X=V_X+abs(V-X^2);                 % V_X (V_X = sum of squared deviation of a distribution probability, variance cannot be negative. So abs())
+      S=S+X;                              % S (S = Sum of X for the individual experiment)
+  else;
+    S=0;                                  % S (S = Sum of my inter-arrival times to 0)
+  endif
+endfor
+E_SX=SX/c                                 % E_SX (E_SX = dividing Expected value of distribution probability Y by total counting arrivals)
+V_SX=V_X/c                                % V_SX (V_SX = dividing sum squared deviation by total counting arrivals)
+E_SI=E_SX+(V_SX/E_SX)                     % E_SI (E_SI = calculating expected value of arrival time intervals)
+E_SR=E_SI/2                               % E_SR (E_SR = calculating expected value of arrival time remainders after last time of taxi)
+
