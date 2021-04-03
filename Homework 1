@@ -8,7 +8,7 @@ clear all;
 % Thank you to: dallison on homework_1 url - https://github.com/dalisson/map6264_queueing_theory
 
 C=zeros(1,50);                                        % 100 C(50) (50 is max number of servers)
-S = 10; %input("Input number of Servers:");            % 110 INPUT S (S = number of servers)
+S = 10; %input("Input number of Servers:");           % 110 INPUT S (S = number of servers)
 NSTOP = 10000; %input("Input number of Customers:");  %      NSTOP (NSTOP = customers to be simulated)
 lambda=4;
 
@@ -42,3 +42,4 @@ endfor
 FCB=K/NSTOP                         % PRINT K/NSTOP (PI - fraction of customers blocked, fraction of time all servers are simultaneously busy)
 FSB=(AB/A)                          % PRINT AB/A (fraction of busy time, fraction of time all servers are simultaneously busy)
 FSX=(SX/A)                          % PRINT SX/A (Total service time divided by total arrival time: Erlang unit)
+                                    %   Covers Erlang's lost system as a' = a(1 - B(s,a))= 9.6(1-B(10,9.6))
