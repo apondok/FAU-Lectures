@@ -1,0 +1,48 @@
+clear all;
+
+% Copyright: FAU https://www.youtube.com/channel/UCJbnVTvSB6gEt4kgOLOMQMA
+% By: Dr Robert B Cooper
+% Subject: MAP 6264 - Queueing Theory
+% Homework 3 BASIC Programming Language
+% Recoded BASIC to Octave (MATLAB): Alexander S Pondok
+% Thank you to: dallison on homework_3 url - https://github.com/dalisson/map6264_queueing_theory
+
+C=zeros(1,50);                                        % 100 C(50) (50 is max number of servers)
+S = 1; %input("Input number of Servers:");           % 110 INPUT S (S = number of servers)
+NSTOP = 10000; %input("Input number of Customers:");  %      NSTOP (NSTOP = customers to be simulated)
+W=zeros(1,NSTOP);
+lambda=4;
+
+A=0;
+J=0;                                          
+X=0;
+SX=0;
+
+for D=1:NSTOP
+  IA=-(1/lambda)*log(1-rand(1));
+  A=A+IA;
+  X=-2.4*log(1-rand(1));
+  SX=SX+X;
+  J=1;
+  for I=1:S
+    if C(1,I)<C(1,J)
+      J=I;
+      continue;
+    endif
+  endfor
+  if C(1,J)<=A
+    C(1,J)=A+X;
+  else
+    W(1,D)=C(1,J)-A;
+    C(1,J)=C(1,J)+X;
+  endif
+endfor
+CL=(SX/A);
+U=((SX/A)/S);
+W_mu=mean(W);
+printf("Carried Load: %d\n",CL);
+printf("Usage: %d\n", U);
+printf("E(W): %d\n", W_mu);
+for i=0:8
+  printf("E(W>%d) = %d\n",i,mean(W > i));
+endfor
