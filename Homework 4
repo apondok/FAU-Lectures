@@ -1,0 +1,91 @@
+clear all;
+
+% Copyright: FAU https://www.youtube.com/channel/UCJbnVTvSB6gEt4kgOLOMQMA
+% By: Dr Robert B Cooper
+% Subject: MAP 6264 - Queueing Theory
+% Homework 4 BASIC Programming Language
+% Recoded BASIC to Octave (MATLAB): Alexander S Pondok
+% Thank you to: dallison on homework_1 url - https://github.com/dalisson/map6264_queueing_theory
+% Runtime = 1.5min to 2min
+
+N = [10 11 12 13 14 15 25 50 100 1000];
+REC=zeros(3,columns(N));
+
+for m=1:columns(N)
+  C=zeros(1,50);                                        % 100 C(50) (50 is max number of servers)
+  S = 10; %input("Input number of Servers:");            % 110 INPUT S (S = number of servers)
+  NSTOP = 10000; %input("Input number of Customers:");  %      NSTOP (NSTOP = customers to be simulated)
+  lambda=4;
+  source = zeros(1,N(1,m));
+  a_star=9.6; % the intended offered load will be kept at 9.6 erlangs
+    t= a_star/N(1,m);
+    % calculate a_hat according to a_star
+    a_hat=0;
+    a_hat=t/(1-t);
+  tal=1;
+  gamma = a_hat/tal;
+  
+  a=0;    
+  K=0;
+  X=0;
+  AB=0;
+  SX=0;
+  for i=1:N(1,m)
+    IA=-(1/gamma)*log(1-rand(1));
+    source(1,i)=IA;
+  endfor
+  for D=1:NSTOP
+    ia=1;
+    for i=1:N(1,m)
+      if source(1,i)<source(1,ia)
+        ia=i;
+        continue;
+      endif
+    endfor  
+    a=source(1,ia);
+    X=-tal*log(1-rand(1));
+    J=1;
+    for I=1:S
+      if C(1,I)<C(1,J)
+        J=I;
+        continue;
+      endif
+    endfor
+    if C(1,J)<a
+      C(1,J)=a+X;
+      IA=-(1/gamma)*log(1-rand(1));
+      source(1,ia)=C(1,J)+IA;
+      SX=SX+X;
+      J=1;
+      for I=1:S
+        if C(1,I)<C(1,J)
+          J=I;
+          continue;
+        endif
+      endfor
+      if C(1,J)>a
+        AB=AB+C(1,J)-a;
+       endif
+    else
+      K=K+1;
+      IA=-(1/gamma)*log(1-rand(1));
+      source(1,ia)=source(1,ia)+IA;
+    endif
+  endfor
+REC(1,m)=(AB/a);
+REC(2,m)=(K/NSTOP);
+REC(3,m)=(SX/a)/S;
+endfor
+
+printf("P_s[n]\n \n");
+for i=1:columns(N)
+  printf("P_%d[%d] = %d\n",S,N(1,i),REC(1,i));
+endfor
+printf("\nPI_s[n]\n \n");
+for i=1:columns(N)
+  printf("PI_%d[%d] = %d\n",S,N(1,i),REC(2,i));
+endfor
+printf("\nRHO_s[n]\n \n");
+for i=1:columns(N)
+  printf("RHO_%d[%d] = %d\n",S,N(1,i),REC(3,i));
+endfor
